@@ -1,5 +1,5 @@
+# /djangonote_project/djangonote/notes/forms.py
 from django.db import models
-
 # Create your models here.
 
 
