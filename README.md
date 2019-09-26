@@ -1,0 +1,1 @@
+# djangonote_project
