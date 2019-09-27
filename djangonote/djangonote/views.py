@@ -17,6 +17,9 @@ def home_view(request):
 			return HttpResponseRedirect(('notes/index.html'))
 		else:
 			messages.add_message(request, messages.INFO, "Authentication Failed!")
-			return HttpResponseRedirect(('home'))
+			return HttpResponseRedirect('home')
 
 	return render(request, 'home.html')
+
+def logout_view(request):
+    return render(request, 'home.html')

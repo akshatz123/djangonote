@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>{% block title %}yo{% endblock title %}</title>
+        <title>{% block title %}Django note{% endblock title %}</title>
         {% block stylesheets %}
         <link rel="stylesheet" href="{% static 'djangonote/bootstrap.min.css' %}" />
         <link rel="stylesheet" href="{% static 'djangonote/bootstrap-theme.min.css' %}" />
@@ -47,7 +47,7 @@
                         <a href="{% url 'notes.addtag' %}">Add tag</a>
                     </li>
                     <li>
-                        <a href="{% url 'notes.index' %}">notes</a>
+                        <a href="{% url 'notes.index_view' %}">notes</a>
                     </li>
                     <li>
                         <a href="{% url 'logout' %}">logout</a>
