@@ -13,13 +13,13 @@ def superuser_only(user):
 
 
 @user_passes_test(superuser_only, login_url="/")
-def index(request):
+def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
     tags = Tag.objects.all()
-    return render(request, 'notes/index.html', {'notes':notes, 'tags': tags})
+    return render(request, 'notes/index.html')
 
 @user_passes_test(superuser_only, login_url="/")
-def addnote(request):
+def add_note(request):
     id = request.GET.get('id', None)
     if id is not None:
         note = get_object_or_404(Note, id=id)
@@ -36,15 +36,15 @@ def addnote(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect(reverse('notes.index'))
+            return HttpResponseRedirect(reverse('notes:index'))
 
     else:
         form = NoteForm(instance=note)
 
-    return render(request, 'notes/addnote.html', {'form': form, 'note':note})
+    return render(request, 'notes/addnote.html', {'form':form, 'note':note})
 
 @user_passes_test(superuser_only, login_url="/")
-def addtag(request):
+def add_tag(request):
     
     id = request.GET.get('id', None)
     if id is not None:
@@ -67,11 +67,11 @@ def addtag(request):
     else:
         form = TagForm(instance=tag)
         
-    return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
+    return render(request, 'notes/addtag.html', {'form':form, 'tag':tag})
 
 
 @user_passes_test(superuser_only, login_url="/")
-def tagsearch(request, **kwargs):
+def tag_search(request, **kwargs):
     slug = kwargs['slug']
     tag = get_object_or_404(Tag, slug=slug)
     notes = tag.notes.all()

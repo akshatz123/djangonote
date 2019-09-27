@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name= 'admin'),
     url(r'^$', home_view, name='home'),
     path('notes/', include('notes.urls'),name= 'notes'),
-    url(r'^logout/$', logout, name='logout'), 
+    path('logout/', logout_view, name='logout'), 
 ]
