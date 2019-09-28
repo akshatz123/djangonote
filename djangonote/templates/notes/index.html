@@ -7,32 +7,32 @@
 </div>
 
 <div class='col-md-9'>
-{% if notes %}
-	{% for note in notes %}
-	<h3 class="page-header">
-		<a href="{% url 'notes:addnote' %}?id={{note.id}}">{{note.label}}</a>
-	</h3>
-	{{note.body|linebreaks}}
-		{% for tag in note.tags.all %}
-		{{tag}}{% if not forloop.last %} | {% endif %}
-		{% endfor %}
-	{% endfor %}
-{% else %}
+{% if not notes %}
 	<div class='alert alert-warning' align='center'>
 		<h3>No Notes Yet!</h3>
 	</div>
+{% else %}
+	{% for note in notes %}
+	<h3 class="page-header">
+		<a href="{% url 'notes.addnote' %}?id={{note.id}}">{{note.label}}</a>
+	</h3>
+	{{note.body | linebreaks}}
+		{% for tag in note.tags.all %}
+		{{tag}}{% if not for loop.last %} | {% endif %}
+		{% endfor %}
+	{% endfor %}
 {% endif %}
 </div>
 
 <div class='col-md-3'>
     <h3 class="page-header" align='right'>Tags</h3>
     <ul>
-        {% if tags %}
-            {% for tag in tags %}
-            <li><a href="{% url 'notes:tagsearch' slug=tag.slug %}">{{tag}}</a></li>
-            {% endfor %}
+        {% if not tag %}
+		<div class='alert alert-warning'>No tags yet!</div>
         {% else %}
-            <div class='alert alert-warning'>No tags yet!</div>
+			{% for tag in tags %}
+            	<li><a href="{% url 'notes:tagsearch' slug=tag.slug %}">{{tag}}</a></li>
+            {% endfor %}
         {% endif %}
     </ul>
 </div>

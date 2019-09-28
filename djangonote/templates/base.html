@@ -48,10 +48,16 @@
 				<li>
 					<a href="{% url 'templates.addtag' %}">add tag</a>
 				</li>
+			</ul>
+			{% if user.is_authenticated %}
+			<ul>
 				<li>
 					<a href="{% url 'templates.logout' %}">logout</a>
 				</li>
 			</ul>
+			{% else %}
+				{{pass}}
+			{% endif %}
 		    </div><!-- /.navbar-collapse -->
 		</div><!-- /.container -->
 	    </div>
