@@ -6,8 +6,7 @@ from notes.models import Note, Tag
 from notes.forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import user_passes_test
-
-
+from django import forms
 def superuser_only(user):
     return (user.is_authenticated and user.is_superuser)
 
@@ -17,8 +16,8 @@ def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
     tags = Tag.objects.all()
     context = {
-        'notes':notes,
-        'tags':tags
+        'notes': notes,
+        'tags': tags
     }
     return render(request, 'notes/index.html')
 
@@ -27,10 +26,7 @@ def index_view(request):
 def add_note(request):
 
     id = request.GET.get('id', None)
-    context = {
-        'form': form,
-        'notes': note
-    }
+
     if id is not None:
         note = get_object_or_404(Note, id=id)
     else:
@@ -46,42 +42,38 @@ def add_note(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect(reverse('notes.index'))
+            return HttpResponseRedirect('notes.index')
 
     else:
         form = NoteForm(instance=note)
 
-    return render(request, 'notes/addnote.html', context)
+    return render(request, 'notes/addnote.html', {'form':form, 'note':note})
 
 
 @user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
-    
     id = request.GET.get('id', None)
-    context =  {
-        'form':form,
-        'tag':tag
-    }
+
     if id is not None:
         tag = get_object_or_404(Tag, id=id)
     else:
         tag = None
-    
+
     if request.method == 'POST':
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
-            return HttpResponseRedirect(reverse('notes.index'))
+            return HttpResponseRedirect(reverse('notes:index_view'))
 
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Tag Added!')
-            return HttpResponseRedirect(reverse('notes:index'))
+            return HttpResponseRedirect('notes:index')
     else:
-        TagForm(instance=tag)
-        
-    return render(request, 'notes/addtag.html', context)
+        form = TagForm(instance=tag)
+
+    return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
 
 @user_passes_test(superuser_only, login_url="/")
