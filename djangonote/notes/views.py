@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from notes.models import Note, Tag
 from notes.forms import NoteForm, TagForm
 from django.utils.text import slugify
@@ -37,13 +37,13 @@ def add_note(request):
         if request.POST.get('control') == 'delete':
             note.delete()
             messages.add_message(request, messages.INFO, 'Note Deleted!')
-            return HttpResponseRedirect(reverse('notes.index'))
+            return HttpResponseRedirect('notes:index')
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect('notes.index')
+            return HttpResponseRedirect('notes:index')
 
     else:
         form = NoteForm(instance=note)
@@ -64,7 +64,7 @@ def add_tag(request):
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
-            return HttpResponseRedirect(reverse('notes.index_view'))
+            return HttpResponseRedirect('notes.index_view')
 
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
