@@ -6,34 +6,25 @@
 	<h1 align='center'>Notes!</h1>
 </div>
 
-<div class='col-md-9'>
+<div class="col-md-9">
 {% if notes %}
-	{% for note in notes %}
-		<h3 class="page-header">
-			<a href="{% url 'notes:addnote' %}?id={{note.id}}">{{note.label}}</a>
-		</h3>
-		{{note.body|linebreaks}}
-			{% for tag in note.tags.all %}
-				{{ tag.label }}{% if not forloop.last %} | {% endif %}
-			{% endfor %}
-	{% endfor %}
+    {% for note in notes %}
+        <li> {{note.body}} </li>
+    {% endfor %}
 {% else %}
-	<div class='alert alert-warning' align='center'>
-		<h3>No Notes Yet!</h3>
-	</div>
+<h2> There are no notes present.</h2>
+{% endif %}
+</div>
+<div class="col-md-3">
+{% if tags %}
+    {% for tag in tags %}
+        <li> {{tag.label}}</li>
+        <br>
+    {% endfor %}
+{% else %}
+<h2> There are no tags present.</h2>
 {% endif %}
 </div>
 
-<div class='col-md-3'>
-    <h3 class="page-header" align='right'>Tags</h3>
-    <ul>
-        {% if tags %}
-            {% for tag in tags %}
-            <li><a href="{% url 'notes:tagsearch' slug=tag.slug %}">{{tag}}</a></li>
-            {% endfor %}
-        {% else %}
-            <div class='alert alert-warning'>No tags yet!</div>
-        {% endif %}
-    </ul>
-</div>
+
 {% endblock body %}

@@ -64,13 +64,13 @@ def add_tag(request):
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
-            return HttpResponseRedirect(reverse('notes:index_view'))
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Tag Added!')
-            return HttpResponseRedirect('notes:index')
+            return HttpResponseRedirect('notes.index')
     else:
         form = TagForm(instance=tag)
 
