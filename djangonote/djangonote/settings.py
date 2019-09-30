@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'notes.apps.NotesConfig',
     'django_extensions',
     'users.apps.UsersConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
