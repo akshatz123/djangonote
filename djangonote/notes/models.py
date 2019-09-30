@@ -17,8 +17,5 @@ class Tag(models.Model):
 	label = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=200)
 
-	# def __unicode__(self):
-	# 	return self.label
-
 	def __str__(self):
 		return self.label
