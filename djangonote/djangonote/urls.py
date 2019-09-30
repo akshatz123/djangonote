@@ -25,10 +25,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name = 'admin'),
     url(r'^$', home_view, name = 'home'),
     path('notes/', include('notes.urls'), name = 'notes'),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
     path('logout/', views.LogoutView.as_view(next_page= settings.LOGOUT_REDIRECT_URL), name='logout'),
-]
-
-urlpatterns += [
-
 ]

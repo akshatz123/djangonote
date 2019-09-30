@@ -23,3 +23,7 @@ def home_view(request):
 
 def logout_view(request):
 	return render(request, 'home.html')
+
+
+def register(request):
+	return  render(request, 'users/templates/register')

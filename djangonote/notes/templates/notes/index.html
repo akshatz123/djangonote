@@ -9,13 +9,13 @@
 <div class='col-md-9'>
 {% if notes %}
 	{% for note in notes %}
-	<h3 class="page-header">
-		<a href="{% url 'notes:addnote' %}?id={{note.id}}">{{note.label}}</a>
-	</h3>
-	{{note.body|linebreaks}}
-		{% for tag in note.tags.all %}
-		{{tag}}{% if not forloop.last %} | {% endif %}
-		{% endfor %}
+		<h3 class="page-header">
+			<a href="{% url 'notes:addnote' %}?id={{note.id}}">{{note.label}}</a>
+		</h3>
+		{{note.body|linebreaks}}
+			{% for tag in note.tags.all %}
+				{{ tag.label }}{% if not forloop.last %} | {% endif %}
+			{% endfor %}
 	{% endfor %}
 {% else %}
 	<div class='alert alert-warning' align='center'>

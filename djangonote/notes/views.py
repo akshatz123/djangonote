@@ -7,6 +7,7 @@ from notes.forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import user_passes_test
 from django import forms
+
 def superuser_only(user):
     return (user.is_authenticated and user.is_superuser)
 
@@ -19,7 +20,7 @@ def index_view(request):
         'notes': notes,
         'tags': tags
     }
-    return render(request, 'notes/index.html')
+    return render(request, 'notes/index.html', context)
 
 
 @user_passes_test(superuser_only, login_url="/")
