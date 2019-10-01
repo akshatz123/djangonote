@@ -1,6 +1,7 @@
 # /djangonote_project/djangonote/notes/forms.py
 from django.db import models
 # Create your models here.
+from django.contrib.auth.models import User
 
 
 class Note(models.Model):
@@ -8,7 +9,6 @@ class Note(models.Model):
 	body = models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True)
 	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
-
 
 
 class Tag(models.Model):

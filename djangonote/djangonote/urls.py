@@ -27,4 +27,5 @@ urlpatterns = [
     path('notes/', include('notes.urls'), name='notes'),
     path('users/', include('users.urls'), name='users'),
     path('logout/', views.LogoutView.as_view(next_page= settings.LOGOUT_REDIRECT_URL), name='logout'),
+
 ]
