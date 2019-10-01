@@ -6,7 +6,3 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     """docstring for Profile"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        msg = '{} Profile'.format(self.user.username)
-        return msg
