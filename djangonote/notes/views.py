@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from notes.models import Note, Tag
 from notes.forms import NoteForm, TagForm
 from django.utils.text import slugify
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django import forms
 
 def superuser_only(user):
-    return (user.is_authenticated and user.is_superuser)
+    return (user.is_authenticated)
 
 
 @user_passes_test(superuser_only, login_url="/")
@@ -43,7 +43,7 @@ def add_note(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect('notes:index')
+            return HttpResponseRedirect('notes.index')
 
     else:
         form = NoteForm(instance=note)

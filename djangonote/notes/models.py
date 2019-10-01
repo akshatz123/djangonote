@@ -9,13 +9,11 @@ class Note(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
 
-	def __unicode__(self):
-		return self.label
 
 
 class Tag(models.Model):
 	label = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=200)
+	slug = models.SlugField(max_length=200, blank=True)
 
 	def __str__(self):
 		return self.label
