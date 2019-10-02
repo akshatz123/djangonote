@@ -12,6 +12,7 @@ def register_view(request):
             form.save()
             msg = 'Your account is created ! You are now able to login'
             messages.success(request, msg)
+            return redirect("/")
     else:
         form = UserRegisterForm()
 
