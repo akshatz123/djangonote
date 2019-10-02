@@ -37,7 +37,7 @@ def add_note(request):
         if request.POST.get('control') == 'delete':
             note.delete()
             messages.add_message(request, messages.INFO, 'Note Deleted!')
-            return HttpResponseRedirect('notes:index')
+            return HttpResponseRedirect(reverse('notes:index'))
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
