@@ -10,5 +10,4 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name='logout'),
     path('register/', register_view, name='register'),
     path('notes/', include('notes.urls'), name='notes'),
-
 ]
