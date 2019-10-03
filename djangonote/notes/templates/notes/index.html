@@ -18,13 +18,14 @@
 <div class="col-md-3">
 {% if tags %}
     {% for tag in tags %}
-        <li><a href="{% url 'notes.tagsearch' slug=tag.slug  %}">{{ tag.label }}</li>
-        <br>
+        <li><a href="{% url 'notes.tagsearch' slug=tag.slug  %}">{{ tag.label }}</a></li>
     {% endfor %}
 {% else %}
 <h2> There are no tags present.</h2>
 {% endif %}
-</div>
 
-
+<!-- {% if user.is_authenticated %}
+	{{ user.username }}
+{% endif %}
+ --></div>
 {% endblock body %}
