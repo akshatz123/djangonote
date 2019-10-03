@@ -7,19 +7,23 @@ from notes.forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import user_passes_test
 from django import forms
-
+from  .models import *
 def superuser_only(user):
-    return (user.is_authenticated)
+    u = user.is_authenticated
+    return (u)
 
 
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
-    notes = Note.objects.all().order_by('-timestamp')
+    # notes = Note.objects.all().order_by('-timestamp')
+    notes = Note.objects.filter(user=request.user)
     tags = Tag.objects.all()
+    user = Note.objects.filter(user=request.user)
     context = {
         'notes': notes,
-        'tags': tags
-    }
+        'tags': tags,
+        # 'user': user,
+    }   
     return render(request, 'notes/index.html', context)
 
 
@@ -37,7 +41,7 @@ def add_note(request):
         if request.POST.get('control') == 'delete':
             note.delete()
             messages.add_message(request, messages.INFO, 'Note Deleted!')
-            return HttpResponseRedirect(reverse('notes:index'))
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
