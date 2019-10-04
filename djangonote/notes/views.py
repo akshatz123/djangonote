@@ -2,28 +2,27 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from notes.models import Note, Tag
-from notes.forms import NoteForm, TagForm
-from django.utils.text import slugify
+from .models import Note, Tag
+from .forms import NoteForm, TagForm
 from django.contrib.auth.decorators import user_passes_test
-from django import forms
-from  .models import *
+
+
 def superuser_only(user):
     u = user.is_authenticated
-    return (u)
+    return u
 
 
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
     # notes = Note.objects.all().order_by('-timestamp')
-    notes = Note.objects.filter(user=request.user)
+    # notes = Note.objects.filter(user=request.user).order_by('timestamp').values()
     tags = Tag.objects.all()
-    user = Note.objects.filter(user=request.user)
+    # user = Note.objects.filter(user=request.user).values()
     context = {
-        'notes': notes,
+        # 'notes': notes,
         'tags': tags,
         # 'user': user,
-    }   
+    }
     return render(request, 'notes/index.html', context)
 
 
@@ -47,7 +46,7 @@ def add_note(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect('notes.index')
+            return HttpResponseRedirect(reverse('notes:index_view'))
 
     else:
         form = NoteForm(instance=note)

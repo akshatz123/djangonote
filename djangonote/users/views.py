@@ -3,7 +3,6 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 
 
-
 def register_view(request):
 
     if request.method == 'POST':
