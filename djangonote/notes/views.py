@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from .models import Note, Tag
 from .forms import NoteForm, TagForm
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.list import ListView
 
 
 def superuser_only(user):
@@ -14,12 +15,12 @@ def superuser_only(user):
 
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
-    # notes = Note.objects.all().order_by('-timestamp')
+    notes = Note.objects.all().order_by('-timestamp')
     # notes = Note.objects.filter(user=request.user).order_by('timestamp').values()
     tags = Tag.objects.all()
     # user = Note.objects.filter(user=request.user).values()
     context = {
-        # 'notes': notes,
+        'notes': notes,
         'tags': tags,
         # 'user': user,
     }
@@ -44,9 +45,10 @@ def add_note(request):
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
-            form.save()
+            f=form.save()
+            f.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect(reverse('notes:index_view'))
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
     else:
         form = NoteForm(instance=note)
@@ -90,3 +92,12 @@ def tag_search(request, **kwargs):
         'tags': tags
     }
     return render(request, 'notes/tagsearch.html', context)
+
+# @user_passes_test(superuser_only, login_url="/")
+class SearchResultsView(ListView):
+    model = Note
+    template_name = 'search.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Note.objects.filter(label__iexact='KRATIK JAIN')

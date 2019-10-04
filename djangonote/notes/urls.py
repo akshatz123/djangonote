@@ -6,4 +6,5 @@ urlpatterns = [
 	url(r'^addnote/', add_note, name='notes.addnote'),
 	url(r'^addtag/', add_tag, name='notes.addtag'),
 	url(r'^tags/(?P<slug>[-\w]+)/$', tag_search, name='notes.tagsearch'),
+	
 ]

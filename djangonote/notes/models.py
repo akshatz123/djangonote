@@ -9,7 +9,7 @@ class Note(models.Model):
 	label = models.CharField(max_length=200)
 	body = models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True)
-	user = models.OneToOneField(User, on_delete=models.CASCADE, default=User.pk)
+	#user = models.OneToOneField(User, on_delete=models.CASCADE, default=User.pk)
 	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
 
 	def __str__(self):
