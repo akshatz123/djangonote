@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="jumbotron">
+	<h1 align='center'>Notes!</h1>
+</div>
+{% if request.GET.q != '' %}
+{% if results %}
+<h1>Results for {{request.GET.q}} </h1>
+{% for result in results %}
+{{result.label}}
+{% endfor %}
+{% else %}
+No search results for this query
+{% endif %}
+{% endif %}
+{% endblock body %}

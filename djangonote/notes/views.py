@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -5,6 +6,7 @@ from django.http import HttpResponseRedirect
 from .models import Note, Tag
 from .forms import NoteForm, TagForm
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.list import ListView
 
 
 def superuser_only(user):
@@ -14,12 +16,12 @@ def superuser_only(user):
 
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
-    # notes = Note.objects.all().order_by('-timestamp')
-    # notes = Note.objects.filter(user=request.user).order_by('timestamp').values()
+    notes = Note.objects.all().order_by('-timestamp')
+    # notes = Note.objects.filter(user=request.user.id)
     tags = Tag.objects.all()
     # user = Note.objects.filter(user=request.user).values()
     context = {
-        # 'notes': notes,
+        'notes': notes,
         'tags': tags,
         # 'user': user,
     }
@@ -44,9 +46,10 @@ def add_note(request):
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
-            form.save()
+            f = form.save()
+            f.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect(reverse('notes:index_view'))
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
     else:
         form = NoteForm(instance=note)
@@ -56,6 +59,7 @@ def add_note(request):
 
 @user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
+
     id = request.GET.get('id', None)
 
     if id is not None:
@@ -90,3 +94,38 @@ def tag_search(request, **kwargs):
         'tags': tags
     }
     return render(request, 'notes/tagsearch.html', context)
+
+#
+# class search_results(ListView):
+#     model = Note
+#     template_name = 'search.html'
+#
+#     def get_queryset(self):
+#         query = self.request.GET.get('q')
+#         return Note.objects.filter(body__startswith=query)
+
+
+@user_passes_test(superuser_only, login_url="/")
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        # print (query)
+        submitbutton = request.GET.get('submit', None)
+        # print(submitbutton)
+        if query is not None:
+            lookups = Q(label__icontains=query)
+            # print (lookups)
+            results = Tag.objects.filter(lookups)
+            # print(results)
+
+            return render(request, 'search.html', {'results': results, 'submitbutton': submitbutton})
+
+        else:
+            return render(request, 'base.html')
+
+    else:
+        return render(request, 'search.html')
+# results =Note.objects.all()
+# body = results.GET.get('body', None)
+# if body:
+#     results = results.objects.filter(body__contains=body)
