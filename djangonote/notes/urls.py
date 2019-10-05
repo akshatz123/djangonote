@@ -9,5 +9,4 @@ urlpatterns = [
 	path('addtag/', add_tag, name='notes.addtag'),
 	url(r'^tags/(?P<slug>[-\w]+)/$', tag_search, name='notes.tagsearch'),
 	path('search/', search, name='notes.search_results'),
-	
 ]
