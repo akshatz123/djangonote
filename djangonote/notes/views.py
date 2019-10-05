@@ -17,13 +17,10 @@ def superuser_only(user):
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
-    # notes = Note.objects.filter(user=request.user.id)
     tags = Tag.objects.all()
-    # user = Note.objects.filter(user=request.user).values()
     context = {
         'notes': notes,
         'tags': tags,
-        # 'user': user,
     }
     return render(request, 'notes/index.html', context)
 
@@ -71,13 +68,13 @@ def add_tag(request):
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
-            return HttpResponseRedirect('notes.index_view')
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Tag Added!')
-            return HttpResponseRedirect('notes.index')
+            return HttpResponseRedirect(reverse('notes.index_view'))
     else:
         form = TagForm(instance=tag)
 
@@ -95,28 +92,15 @@ def tag_search(request, **kwargs):
     }
     return render(request, 'notes/tagsearch.html', context)
 
-#
-# class search_results(ListView):
-#     model = Note
-#     template_name = 'search.html'
-#
-#     def get_queryset(self):
-#         query = self.request.GET.get('q')
-#         return Note.objects.filter(body__startswith=query)
-
 
 @user_passes_test(superuser_only, login_url="/")
 def search(request):
     if request.method == 'GET':
         query = request.GET.get('q')
-        # print (query)
         submitbutton = request.GET.get('submit', None)
-        # print(submitbutton)
         if query is not None:
             lookups = Q(label__icontains=query)
-            # print (lookups)
             results = Tag.objects.filter(lookups)
-            # print(results)
 
             return render(request, 'search.html', {'results': results, 'submitbutton': submitbutton})
 
@@ -125,7 +109,3 @@ def search(request):
 
     else:
         return render(request, 'search.html')
-# results =Note.objects.all()
-# body = results.GET.get('body', None)
-# if body:
-#     results = results.objects.filter(body__contains=body)
