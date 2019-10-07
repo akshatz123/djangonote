@@ -9,7 +9,8 @@
 {% if results %}
 <h1>Results for {{request.GET.q}} </h1>
 {% for result in results %}
-{{result.label}}
+{{result.label}}<br/>
+{{result.body}}
 {% endfor %}
 {% else %}
 No search results for this query

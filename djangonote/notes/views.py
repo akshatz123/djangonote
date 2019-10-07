@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .models import Note, Tag
 from .forms import NoteForm, TagForm
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.views.generic.list import ListView
 
 
@@ -16,7 +16,7 @@ def superuser_only(user):
 
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
-    notes = Note.objects.all().order_by('-timestamp')
+    notes = Note.objects.filter(user=request.user)
     tags = Tag.objects.all()
     context = {
         'notes': notes,
@@ -43,8 +43,10 @@ def add_note(request):
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
-            f = form.save()
-            f.save()
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+
             messages.add_message(request, messages.INFO, 'Note Added!')
             return HttpResponseRedirect(reverse('notes.index_view'))
 

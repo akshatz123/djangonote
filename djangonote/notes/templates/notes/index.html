@@ -9,7 +9,9 @@
 <div class="col-md-9">
 {% if notes %}
     {% for note in notes %}
-        <li> {{note.body}} </li>
+        <li> {{note.label}} </li>
+        <br>
+        <li>{{note.label}}</li>
     {% endfor %}
 {% else %}
 <h2> There are no notes present.</h2>

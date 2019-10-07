@@ -1,19 +1,8 @@
 from django.db import models
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 # Create your models here.
 from django.utils import timezone
 from django.utils.text import slugify
-
-
-class Note(models.Model):
-	label = models.CharField(max_length=200)
-	body = models.TextField()
-	timestamp = models.DateTimeField(default=timezone.now)
-	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
-
-
-	def __str__(self):
-		return self.label
 
 
 class Tag(models.Model):
@@ -36,3 +25,16 @@ class Tag(models.Model):
 		if not self.slug:
 			self.slug = self._get_unique_slug()
 		super().save(*args, **kwargs)
+
+
+class Note(models.Model):
+	label = models.CharField(max_length=200)
+	body = models.TextField()
+	timestamp = models.DateTimeField(default=timezone.now)
+	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.label
+
+
