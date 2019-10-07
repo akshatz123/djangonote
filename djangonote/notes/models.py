@@ -1,18 +1,26 @@
 from django.db import models
-# Create your models here.
 from django.contrib.auth.models import User
-from django.utils.text import slugify
+# Create your models here.
 from django.utils import timezone
+from django.utils.text import slugify
+from django.contrib.auth import get_user_model
+
 
 class Note(models.Model):
 	label = models.CharField(max_length=200)
 	body = models.TextField()
-	timestamp = models.DateTimeField(auto_now_add=True)
-	user = 	models.ForeignKey(User,on_delete=models.CASCADE)
+	timestamp = models.DateTimeField(default=timezone.now)
 	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
-
+	# user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	# def save(self, *args, **kwargs):
+	#     super().save(*args, **kwargs)
+	#     if not self.user:
+	#         self.user = self.created_by
+	#         super(Application, self).save(*args, **kwargs)
 	def __str__(self):
 		return self.label
+
 
 class Tag(models.Model):
 	label = models.CharField(max_length=200)

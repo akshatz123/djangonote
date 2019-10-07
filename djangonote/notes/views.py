@@ -1,29 +1,27 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from notes.models import Note, Tag
-from notes.forms import NoteForm, TagForm
-from django.utils.text import slugify
-from django.contrib.auth.decorators import user_passes_test
-from django import forms
-from  .models import *
+from .models import Note, Tag
+from .forms import NoteForm, TagForm
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.views.generic.list import ListView
+
+
 def superuser_only(user):
     u = user.is_authenticated
-    return (u)
+    return u
 
-
+@login_required
 @user_passes_test(superuser_only, login_url="/")
 def index_view(request):
-    # notes = Note.objects.all().order_by('-timestamp')
     notes = Note.objects.filter(user=request.user)
     tags = Tag.objects.all()
-    user = Note.objects.filter(user=request.user)
     context = {
         'notes': notes,
         'tags': tags,
-        # 'user': user,
-    }   
+    }       
     return render(request, 'notes/index.html', context)
 
 
@@ -45,9 +43,12 @@ def add_note(request):
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
-            form.save()
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            # f.save()
             messages.add_message(request, messages.INFO, 'Note Added!')
-            return HttpResponseRedirect('notes.index')
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
     else:
         form = NoteForm(instance=note)
@@ -57,6 +58,7 @@ def add_note(request):
 
 @user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
+
     id = request.GET.get('id', None)
 
     if id is not None:
@@ -68,13 +70,13 @@ def add_tag(request):
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
-            return HttpResponseRedirect('notes.index_view')
+            return HttpResponseRedirect(reverse('notes.index_view'))
 
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Tag Added!')
-            return HttpResponseRedirect('notes.index')
+            return HttpResponseRedirect(reverse('notes.index_view'))
     else:
         form = TagForm(instance=tag)
 
@@ -91,3 +93,21 @@ def tag_search(request, **kwargs):
         'tags': tags
     }
     return render(request, 'notes/tagsearch.html', context)
+
+
+@user_passes_test(superuser_only, login_url="/")
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        submitbutton = request.GET.get('submit', None)
+        if query is not None:
+            lookups = Q(label__icontains=query)
+            results = Tag.objects.filter(lookups)
+
+            return render(request, 'search.html', {'results': results, 'submitbutton': submitbutton})
+
+        else:
+            return render(request, 'base.html')
+
+    else:
+        return render(request, 'search.html')

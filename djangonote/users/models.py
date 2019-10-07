@@ -10,4 +10,4 @@ class Profile(models.Model):
 
     def __str__(self):
     	user  = self.user
-    	return Profile.objects.filter(user=user)
+    	return Profile.objects.all()
