@@ -11,7 +11,7 @@
     {% for note in notes %}
         <li> {{note.label}} </li>
         <br>
-        <li>{{note.label}}</li>
+    <li><a href="{% url 'notes.addnote' %}?id={{note.id}}">{{note.body}}</a></li>
     {% endfor %}
 {% else %}
 <h2> There are no notes present.</h2>
@@ -25,9 +25,5 @@
 {% else %}
 <h2> There are no tags present.</h2>
 {% endif %}
-
-<!-- {% if user.is_authenticated %}
-	{{ user.username }}
-{% endif %}
- --></div>
+</div>
 {% endblock body %}
