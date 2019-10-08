@@ -41,10 +41,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'notes.addnote' %}">Add note</a>
+                        <a href="{% url 'notes.addtag' %}">Add tag</a>
                     </li>
                     <li>
-                        <a href="{% url 'notes.addtag' %}">Add tag</a>
+                        <a href="{% url 'notes.addnote' %}">Add note</a>
                     </li>
                     <li>
                         <a href="{% url 'notes.index_view' %}">Notes</a>
