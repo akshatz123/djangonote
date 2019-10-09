@@ -7,11 +7,14 @@
 </div>
 
 <div class="col-md-9">
+	Notes
 {% if notes %}
     {% for note in notes %}
+
         <li> {{note.label}} </li>
         <br>
     <li><a href="{% url 'notes.addnote' %}?id={{note.id}}">{{note.body}}</a></li>
+    <hr>
     {% endfor %}
 {% else %}
 <h2> There are no notes present.</h2>
@@ -20,7 +23,9 @@
 <div class="col-md-3">
 {% if tags %}
     {% for tag in tags %}
-        <li><a href="{% url 'notes.tagsearch' slug=tag.slug  %}">{{ tag.label }}</a></li>
+        <li>
+        	<a href="{% url 'notes.tagsearch' slug=tag.slug  %}">{{ tag.label }}</a>
+        </li>
     {% endfor %}
 {% else %}
 <h2> There are no tags present.</h2>

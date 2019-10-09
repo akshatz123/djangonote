@@ -83,16 +83,16 @@ def add_tag(request):
     return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
 
-@user_passes_test(superuser_only, login_url="/")
-def tag_search(request, **kwargs):
-    slug = kwargs['slug']
-    tags = get_object_or_404(Tag, slug=slug)
-    notes = tags.notes.all()
-    context = {
-        'notes': notes,
-        'tags': tags
-    }
-    return render(request, 'notes/tagsearch.html', context)
+# @user_passes_test(superuser_only, login_url="/")
+# def tag_search(request, **kwargs):
+#     slug = kwargs['slug']
+#     tags = get_object_or_404(Tag, slug=slug)
+#     notes = tags.notes.all()
+#     context = {
+#         'notes': notes,
+#         'tags': tags
+#     }
+#     return render(request, 'notes/tagsearch.html', context)
 
 
 @user_passes_test(superuser_only, login_url="/")
