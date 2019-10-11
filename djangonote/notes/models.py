@@ -30,7 +30,7 @@ class Note(models.Model):
 	label = models.CharField(max_length=200)
 	body = models.TextField()
 	timestamp = models.DateTimeField(default=timezone.now)
-	tags = models.ManyToManyField('Tag', related_name='notes', blank=True)
+	tags = models.ForeignKey('Tag', related_name='notes', blank=True, on_delete=models.CASCADE, null=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 	def __str__(self):

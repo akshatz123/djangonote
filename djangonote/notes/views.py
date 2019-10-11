@@ -7,7 +7,7 @@ from .models import Note, Tag
 from .forms import NoteForm, TagForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.views.generic.list import ListView
-
+from django.utils.text import slugify
 
 def superuser_only(user):
     u = user.is_authenticated
@@ -59,24 +59,27 @@ def add_note(request):
 @user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
 
+ 
     id = request.GET.get('id', None)
-
     if id is not None:
         tag = get_object_or_404(Tag, id=id)
     else:
         tag = None
-
+    
     if request.method == 'POST':
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag Deleted!')
             return HttpResponseRedirect(reverse('notes.index_view'))
-
+        
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
-            form.save()
+            t = form.save(commit=False)
+            t.slug = slugify(t.label)
+            t.save()
             messages.add_message(request, messages.INFO, 'Tag Added!')
             return HttpResponseRedirect(reverse('notes.index_view'))
+    
     else:
         form = TagForm(instance=tag)
 
@@ -88,8 +91,6 @@ def tag_search(request, **kwargs):
     slug = kwargs['slug']
     tags = get_object_or_404(Tag, slug=slug)
     notes = tags.notes.all()
-    if tags.exists==False:
-        return False 
     context = {
         'notes': notes,
         'tags': tags

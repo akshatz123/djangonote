@@ -21,10 +21,11 @@
 {% endif %}
 </div>
 <div class="col-md-3">
+    Tags
 {% if tags %}
     {% for tag in tags %}
         <li>
-        	<a href="{% url 'notes.tagsearch' slug=tag.slug  %}">{{ tag.label }}</a>
+        	<a href="{% url 'notes.tagsearch' slug=tag.slug %}">{{tag.label}}</a>
         </li>
     {% endfor %}
 {% else %}
