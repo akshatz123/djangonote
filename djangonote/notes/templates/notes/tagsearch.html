@@ -13,8 +13,7 @@
 	<h3 class="page-header">
 		<a href="{% url 'notes.addnote' %}?id={{note.id}}">{{note.label}}</a>
 	</h3>
-	<!-- {{tag.label}}
-	 -->{{note.body}}
+	{{note.body}}
 		{% for tag in notes %}
 		{% endfor %}
 	{% endfor %}

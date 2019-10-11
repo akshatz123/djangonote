@@ -10,9 +10,6 @@
 	Notes
 {% if notes %}
     {% for note in notes %}
-
-        <li> {{note.label}} </li>
-        <br>
     <li><a href="{% url 'notes.addnote' %}?id={{note.id}}">{{note.body}}</a></li>
     <hr>
     {% endfor %}
@@ -27,6 +24,7 @@
         <li>
         	<a href="{% url 'notes.tagsearch' slug=tag.slug %}">{{tag.label}}</a>
         </li>
+        <hr>
     {% endfor %}
 {% else %}
 <h2> There are no tags present.</h2>
