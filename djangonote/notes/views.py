@@ -30,7 +30,7 @@ def index_view(request):
 def add_note(request):
 
     id = request.GET.get('id', None)
-    tag = Tag.objects.all()
+    tag = Tag.objects.filter(id= id)
     if id is not None:
         note = get_object_or_404(Note, id=id)
     else:
@@ -48,8 +48,7 @@ def add_note(request):
             note = form.save(commit=False)
             note.user = request.user
             note.save()
-
-            messages.add_message(request, messages.INFO, 'Note Added!')
+            messages.add_message(request, messages.INFO, 'Note Modified!')
             return HttpResponseRedirect(reverse('notes.index_view'))
 
     else:
