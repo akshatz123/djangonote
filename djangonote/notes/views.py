@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.views.generic.list import ListView
 from django.utils.text import slugify
 
+
 def superuser_only(user):
     u = user.is_authenticated
     return u
@@ -29,7 +30,7 @@ def index_view(request):
 def add_note(request):
 
     id = request.GET.get('id', None)
-
+    tag = Tag.objects.all()
     if id is not None:
         note = get_object_or_404(Note, id=id)
     else:
@@ -38,7 +39,8 @@ def add_note(request):
     if request.method == 'POST':
         if request.POST.get('control') == 'delete':
             note.delete()
-            messages.add_message(request, messages.INFO, 'Note Deleted!')
+            tag.delete()
+            messages.add_message(request, messages.INFO, 'Note  and Tag Deleted!')
             return HttpResponseRedirect(reverse('notes.index_view'))
 
         form = NoteForm(request.POST, instance=note)
@@ -59,8 +61,8 @@ def add_note(request):
 @user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
 
- 
     id = request.GET.get('id', None)
+
     if id is not None:
         tag = get_object_or_404(Tag, id=id)
     else:
@@ -114,3 +116,4 @@ def search(request):
 
     else:
         return render(request, 'search.html')
+
